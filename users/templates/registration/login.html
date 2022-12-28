@@ -1,0 +1,20 @@
+{% extends "todo_lists/base.html" %}
+
+{% block title %}Log in{% endblock %}
+
+{% block content %}
+
+<h1>Log in</h1>
+<form method="POST" action="{% url 'users:login' %}">
+  {% csrf_token %}
+  {{ form }}
+  <button type="submit">Log in</button>
+  <input type="hidden" name="next" value="{% url 'main:index' %}">
+</form>
+
+<div>
+  <h2>Don't have an account yet?</h2>
+  <a href="{% url 'users:register' %}">Register</a>
+</div>
+
+{% endblock %}

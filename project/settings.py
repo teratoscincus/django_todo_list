@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     # Project specific apps
     "todo_lists",
+    "users",
     # Django Default apps
     "django.contrib.admin",
     "django.contrib.auth",

@@ -4,16 +4,22 @@
 
 {% block content %}
 
-<h1>Todo List: </h1>
-{% for entry in entries %}
-  <h2>{{ entry.heading }}</h2>
-  <p>{{ entry.text }}</p>
-  {% for note in notes %}
-    {% if note.parent_entry.id == entry.id %}
-      <h3>{{ note.heading }}</h3>
-      <p>{{ note.text }}</p>
-    {% endif %}
+{% if user.is_authenticated %}
+  <p>Hello {{ user.username }}</p>
+
+  <h1>Todo List: </h1>
+  {% for entry in entries %}
+    <h2>{{ entry.heading }}</h2>
+    <p>{{ entry.text }}</p>
+    {% for note in notes %}
+      {% if note.parent_entry.id == entry.id %}
+        <h3>{{ note.heading }}</h3>
+        <p>{{ note.text }}</p>
+      {% endif %}
+    {% endfor %}
   {% endfor %}
-{% endfor %}
+{% else %}
+  <p>Not registered?</p>
+{% endif %}
 
 {% endblock %}

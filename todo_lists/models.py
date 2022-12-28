@@ -1,3 +1,6 @@
 from django.db import models
 
-# Create your models here.
+
+class TodoListEntry(models.Model):
+    heading = models.CharField(max_length=50)
+    text = models.CharField(max_length=200)

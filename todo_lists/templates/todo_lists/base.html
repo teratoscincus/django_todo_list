@@ -10,6 +10,15 @@
 <body>
   <header>
     <h1>Django Todo List</h1>
+    <nav>
+      <ul>
+        {% if user.is_authenticated %}
+        <li><a href="{% url 'users:logout' %}">Log out</a></li>
+        {% else %}
+        <li><a href="{% url 'users:login' %}">Log in</a></li>
+        {% endif %}
+      </ul>
+    </nav>
   </header>
   {% block content %}{% endblock %}
 </body>

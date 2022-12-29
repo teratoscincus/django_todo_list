@@ -19,7 +19,8 @@
     {% endfor %}
   {% endfor %}
 {% else %}
-  <p>Not registered?</p>
+  <p>You need to log in to use Todo Lists</p>
+  <a href="{% url 'users:login' %}">Log in</a>
 {% endif %}
 
 {% endblock %}

@@ -8,9 +8,11 @@
   <p>Hello {{ user.username }}</p>
 
   <h1>Todo List: </h1>
+  <a href="{% url 'todo_lists:new_entry' %}">New entry</a>
   {% for entry in entries %}
     <h2>{{ entry.heading }}</h2>
     <p>{{ entry.text }}</p>
+    <a href="{% url 'todo_lists:new_note' %}">New note</a>
     {% for note in notes %}
       {% if note.parent_entry.id == entry.id %}
         <h3>{{ note.heading }}</h3>

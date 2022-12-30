@@ -5,7 +5,7 @@ from django.contrib.auth import login
 
 from users.forms import RegistrationForm
 
-# Users views.
+
 def register(request):
     if request.method == "POST":
         # Populate form with data from request.

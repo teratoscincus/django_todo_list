@@ -1,7 +1,22 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import Http404
 
 from . import models
 from . import forms
+
+
+def is_user_entry_owner(request, entry):
+    """
+    Checks if the current user is the owner of an entry.
+
+    The entry parameter expects an instance of the Entry model.
+
+    Returns a boolean value.
+    """
+    if entry.owner == request.user:
+        return True
+    else:
+        return False
 
 
 def index(request):
@@ -49,6 +64,10 @@ def new_entry(request):
 def new_note(request, parent_entry_id):
     # Init parent Entry instance.
     entry = get_object_or_404(models.Entry, id=parent_entry_id)
+
+    # Prevent non owner users from making notes to entry.
+    if not is_user_entry_owner(request, entry):
+        raise Http404
 
     if request.method == "POST":
         # Populate form with data from request

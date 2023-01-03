@@ -19,6 +19,20 @@ def is_user_entry_owner(request, entry):
         return False
 
 
+def is_parent_entry(entry, note):
+    """
+    Checks if given entry is parent_entry of note.
+
+    Parameters expect instances of respective Model.
+
+    Returns a boolean value.
+    """
+    if entry == note.parent_entry:
+        return True
+    else:
+        return False
+
+
 def index(request):
     """Displays the index view o the Todo List app."""
     # Get entries belonging to current user.
@@ -63,6 +77,10 @@ def new_entry(request):
 
 def edit_entry(request, entry_id):
     entry = models.Entry.objects.get(id=entry_id)
+
+    # Prevent non owner users from editing entry.
+    if not is_user_entry_owner(request, entry):
+        raise Http404
 
     if request.method == "POST":
         # Populate wit data from request.
@@ -131,6 +149,12 @@ def new_note(request, parent_entry_id):
 def edit_note(request, note_id, parent_entry_id):
     note = models.Note.objects.get(id=note_id)
     entry = get_object_or_404(models.Entry, id=parent_entry_id)
+
+    # Prevent non owner users from editing note or changing FK value.
+    if not is_user_entry_owner(request, entry):
+        raise Http404
+    if not is_parent_entry(entry, note):
+        raise Http404
 
     if request.method == "POST":
         # Populate wit data from request.

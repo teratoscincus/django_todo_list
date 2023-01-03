@@ -61,6 +61,31 @@ def new_entry(request):
     return render(request, "todo_lists/new_entry.html", context)
 
 
+def edit_entry(request, entry_id):
+    entry = models.Entry.objects.get(id=entry_id)
+
+    if request.method == "POST":
+        # Populate wit data from request.
+        form = forms.EntryForm(instance=entry, data=request.POST)
+
+        # Validate and redirect user.
+        if form.is_valid():
+            edited_entry = form.save(commit=False)
+            edited_entry.owner = request.user
+            edited_entry.save()
+
+            return redirect("todo_lists:index")
+    else:
+        # Fill form with info from Entry instance.
+        form = forms.EntryForm(instance=entry)
+
+    context = {
+        "form": form,
+        "entry": entry,
+    }
+    return render(request, "todo_lists/edit_entry.html", context)
+
+
 def new_note(request, parent_entry_id):
     # Init parent Entry instance.
     entry = get_object_or_404(models.Entry, id=parent_entry_id)
@@ -90,3 +115,30 @@ def new_note(request, parent_entry_id):
         "entry": entry,
     }
     return render(request, "todo_lists/new_note.html", context)
+
+
+def edit_note(request, note_id, parent_entry_id):
+    note = models.Note.objects.get(id=note_id)
+    entry = get_object_or_404(models.Entry, id=parent_entry_id)
+
+    if request.method == "POST":
+        # Populate wit data from request.
+        form = forms.NoteForm(instance=note, data=request.POST)
+
+        # Validate and redirect user.
+        if form.is_valid():
+            edited_note = form.save(commit=False)
+            edited_note.parent_entry = entry
+            edited_note.save()
+
+            return redirect("todo_lists:index")
+    else:
+        # Fill form with info from Entry instance.
+        form = forms.NoteForm(instance=note)
+
+    context = {
+        "form": form,
+        "note": note,
+        "entry": entry,
+    }
+    return render(request, "todo_lists/edit_note.html", context)

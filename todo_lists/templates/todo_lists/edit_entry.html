@@ -1,0 +1,15 @@
+{% extends "todo_lists/base.html" %}
+
+{% block title %}Edit entry{% endblock %}
+
+{% block content %}
+
+<h1>Edit entry</h1>
+<h2>{{ entry.heading }}</h2>
+<form method="POST" action="{% url 'todo_lists:edit_entry' entry.id %}">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Save</button>
+</form>
+
+{% endblock %}

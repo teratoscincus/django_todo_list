@@ -5,7 +5,7 @@
 {% block content %}
 
 <h1>Edit entry</h1>
-<h2>{{ entry.heading }} <span><a href="{% url 'todo_lists:delete_entry' entry.id %}">Delete entry</a></span></h2>
+<h2>{{ entry.heading }} <span><button><a href="{% url 'todo_lists:delete_entry' entry.id %}">Delete entry</a></span></button></h2>
 <form method="POST" action="{% url 'todo_lists:edit_entry' entry.id %}">
   {% csrf_token %}
   {{ form.as_p }}

@@ -86,6 +86,17 @@ def edit_entry(request, entry_id):
     return render(request, "todo_lists/edit_entry.html", context)
 
 
+def delete_entry(request, entry_id):
+    entry = models.Entry.objects.get(id=entry_id)
+
+    # Prevent non owner users from deleting entry.
+    if is_user_entry_owner(request, entry):
+        entry.delete()
+        return redirect("todo_lists:index")
+    else:
+        raise Http404
+
+
 def new_note(request, parent_entry_id):
     # Init parent Entry instance.
     entry = get_object_or_404(models.Entry, id=parent_entry_id)
@@ -142,3 +153,15 @@ def edit_note(request, note_id, parent_entry_id):
         "entry": entry,
     }
     return render(request, "todo_lists/edit_note.html", context)
+
+
+def delete_note(request, note_id, parent_entry_id):
+    note = models.Note.objects.get(id=note_id)
+    entry = get_object_or_404(models.Entry, id=parent_entry_id)
+
+    # Prevent non owner users from deleting note.
+    if is_user_entry_owner(request, entry):
+        note.delete()
+        return redirect("todo_lists:index")
+    else:
+        raise Http404
